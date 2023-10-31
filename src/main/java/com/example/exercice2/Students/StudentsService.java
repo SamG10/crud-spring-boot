@@ -2,7 +2,9 @@ package com.example.exercice2.Students;
 
 import com.example.exercice2.Students.Models.Student;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,17 +13,27 @@ import java.util.Optional;
 @Service()
 public class StudentsService {
     private final StudentsRepository studentsRepository;
+    private final MongoTemplate mongoTemplate;
 
-    public StudentsService(StudentsRepository studentsRepository) {
+    public StudentsService(StudentsRepository studentsRepository, MongoTemplate mongoTemplate) {
         this.studentsRepository = studentsRepository;
+        this.mongoTemplate = mongoTemplate;
     }
 
     public Student create(Student student) {
         return studentsRepository.save(student);
     }
 
-    public List<Student> findAll() {
-        return studentsRepository.findAll();
+    public List<Student> findAll(String firstname) {
+        Query query = new Query();
+        System.out.println("query" + query);
+        query.addCriteria(Criteria.where("firstname").is(firstname));
+        System.out.println(query);
+
+        if(firstname != null) {
+            return mongoTemplate.find(query, Student.class);
+        }
+        return mongoTemplate.findAll(Student.class);
     }
 
     public Optional<Student> findOne(String id) {

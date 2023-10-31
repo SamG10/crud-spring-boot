@@ -21,8 +21,8 @@ public class StudentsController {
     }
 
     @GetMapping()
-    public List<Student> findAll() {
-        return studentsService.findAll();
+    public List<Student> findAll(@RequestParam(value = "firstname", required = false) String firstname) {
+        return studentsService.findAll(firstname);
     }
 
     @GetMapping("/{id}")
