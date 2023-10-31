@@ -4,6 +4,7 @@ import com.example.exercice2.Students.Models.Student;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController()
 @RequestMapping("students")
@@ -25,17 +26,17 @@ public class StudentsController {
     }
 
     @GetMapping("/{id}")
-    public Student findOne(@PathVariable() int id) {
+    public Optional<Student> findOne(@PathVariable() String id) {
         return studentsService.findOne(id);
     };
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable() int id) {
+    public void delete(@PathVariable() String id) {
         studentsService.delete(id);
     }
 
-    @PutMapping("/{id}")
-    public Student update(@PathVariable() int id, @RequestBody() Student student) {
+    @PatchMapping("/{id}")
+    public Student update(@PathVariable() String id, @RequestBody() Student student) throws Exception {
         return studentsService.update(id, student);
     }
 }
